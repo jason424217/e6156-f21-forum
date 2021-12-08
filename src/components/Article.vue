@@ -11,8 +11,7 @@
           <li>•    posted at    {{post.update_time}}</li>
           <li>•    author : {{post.nickname}}</li>
         </ul>
-
-        <div v-html="post.content" class="topic_content"></div>
+        <div class="markdown-text" v-html="post.html"></div>
       </div>
 
       <div id="reply">
@@ -27,12 +26,13 @@
       </div>
 
       </div>
-     
+
     </div>
   </div>
 </template>
 
 <script>
+import {marked} from 'marked'
 export default {
   name: "Article",
   data() {
@@ -54,12 +54,12 @@ export default {
         .then(res => {
           this.isLoading = false;
           this.post = res.data.data[0];
+          this.post.html = marked(this.post.content)
         })
         .catch(err => {
           console.log(err);
         });
     },
-
   },
   beforeMount: function() {
     this.isLoading = true; //加载成功之前显示加载动画
@@ -74,8 +74,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
- 
 <style>
 @import url("../assets/markdown-github.css"); /* 引入外部css需去掉scoped */
 .article {
@@ -119,7 +117,6 @@ export default {
   display: flex;
   justify-content:flex-end;
   margin-right: 15px;
-  
 
 }
 .replyup p{
