@@ -1,13 +1,17 @@
 <template>
+  <div class="vertical-center">
+<div class="inner-block">
 <div class="Auth">
-  <b>Please log in</b>
+  <b class="welcome-text">Welcome to Himalayas. Please login first.</b>
   <g-signin-button
     :params="googleSignInParams"
     @success="onSignInSuccess"
     @error="onSignInError">
     Sign in with Google
   </g-signin-button>
-</div>
+  </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -53,12 +57,37 @@ export default {
 
 <style>
 .g-signin-button {
-  /* This is where you control how the button looks. Be creative! */
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  background-color: #3c82f7;
+  box-sizing: border-box;
+  position: relative;
+  /* width: 13em;  - apply for fixed size */
+  margin: 0.2em;
+  padding: 0 15px 0 46px;
+  border: none;
+  text-align: left;
+  line-height: 34px;
+  white-space: nowrap;
+  border-radius: 0.2em;
+  font-size: 16px;
   color: #fff;
-  box-shadow: 0 3px 0 #0f69ff;
+  background: #3cbada;
+}
+.g-signin-button:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 100%;
+
+  border-right: #3290e7 1px solid;
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png")
+    6px 6px no-repeat;
+}
+
+.g-signin-button:hover,
+.g-signin-button:focus {
+  cursor: pointer;
+  background: #1c4a9e;
 }
 </style>

@@ -1,11 +1,12 @@
 <template>
+<div class="vue-tempalte">
   <div id="app">
     <Header></Header>
     <div class="main">
     <router-view name="main"></router-view>
     <router-view name="slidebar"></router-view> 
-
     </div>
+  </div>
   </div>
 </template>
 
@@ -26,21 +27,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-*{
-  margin:0;
-  padding:0;
-}
- 
-.main{
-  width:85%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-}
- #app{
-  background-color: #e1e1e1; 
-}
-</style>

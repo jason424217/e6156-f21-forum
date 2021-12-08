@@ -76,7 +76,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
  
-<style>
+<style scoped>
 @import url("../assets/markdown-github.css"); /* 引入外部css需去掉scoped */
 .article {
   background-color: #e1e1e1;
