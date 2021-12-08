@@ -15,16 +15,7 @@
       </div>
 
       <div id="reply">
-         <div class="topbar">Comments</div>
-
-      <div v-for="(comment,index) in post.comments" :key="index" class="replySec">
-        <div class="replyup">
-          <span>{{comment.nickname}}</span>
-          <span>{{comment.create_time}}</span>
-          <p v-html="comment.content"></p>
-        </div>
-      </div>
-
+        <comment-list :comment_array="post.comments" :post_id="post.post_id" @refresh="updateComments"></comment-list>
       </div>
 
     </div>
@@ -33,8 +24,10 @@
 
 <script>
 import {marked} from 'marked'
+import CommentList from "./CommentList";
 export default {
   name: "Article",
+  components: {CommentList},
   data() {
     return {
       isLoading: false,
@@ -54,12 +47,34 @@ export default {
         .then(res => {
           this.isLoading = false;
           this.post = res.data.data[0];
+          if (this.post['comments'] === undefined) {
+            this.post['comments'] = []
+          }
+          console.log(this.post.comments)
           this.post.html = marked(this.post.content)
         })
         .catch(err => {
           console.log(err);
         });
     },
+    updateComments: function() {
+      this.$http
+        .get("https://d2tvlmotz0dchv.cloudfront.net/api/postinfo/" + this.post.post_id,
+          {
+            headers:{
+              id_token: this.$root.id_token
+            }
+          }
+        ) // 字符串模板形式 `https://cnodejs.org/api/v1/topic/${this.$route.params.id}`
+        .then(res => {
+          this.isLoading = false;
+          let update = res.data.data[0];
+          this.post.comments = update['comments']
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
   beforeMount: function() {
     this.isLoading = true; //加载成功之前显示加载动画
