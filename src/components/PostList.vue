@@ -2,7 +2,7 @@
   <div class="PostList">
     <!-- 数据未返回时，显示这个正在加载的gif -->
     <div class="loading" v-if="isLoading">
-      <img  src="../assets/loading.gif" alt="">
+      <img  src="../assets/loading2.gif" alt="">
     </div>
     <router-link :to="'new_post'" tag="button">Create a new post!</router-link>
     <!-- 代表我们的主题帖子列表 -->
@@ -135,9 +135,7 @@ export default {
   padding:0;
 }
  .PostList{
-    background-color: #e1e1e1;
     width: 100%;
-    margin-top:15px;
     padding-bottom: 100px;
   }
 
@@ -160,7 +158,7 @@ export default {
     font-size: 15px;
     font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, sans-serif !important;
     font-weight: 400;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.95);
     color: #333;
     border-top: 1px solid #f0f0f0;
   }
@@ -251,7 +249,7 @@ export default {
 
   .loading {
     text-align: center;
-    padding-top: 300px;
-
+    padding: 200px;
+    opacity: 0.7; 
   }
 </style>
