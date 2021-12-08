@@ -2,11 +2,12 @@
   <div class="header">
   <img src="../assets/mountain.svg" alt="logo">
   <span v-if="this.$root.logged_in" class="span">Welcome to E6156 Himalayas Forum, {{this.$root.email}}</span>
-    
+    <notifications position="top right" />
+
     <ul>
      <router-link :to="{
       name:'root',
-      }"> <li v-if="this.$root.logged_in"><a href="http://localhost:8080/#/">Home page</a></li>  
+      }"> <li v-if="this.$root.logged_in"><a href="http://localhost:8080/#/">Home page</a></li>
       </router-link>
 
       <li v-if="this.$root.logged_in"><a href="#">User Profile</a></li>

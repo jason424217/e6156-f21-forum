@@ -6,6 +6,7 @@ import Article from '../components/Article'
 import UserInfo from '../components/UserInfo'
 import SlideBar from '../components/SlideBar'
 import Auth from '../components/Auth'
+import Post from "../components/Post";
 
 Vue.use(Router)
 Vue.use(GSignInButton)
@@ -24,6 +25,13 @@ export default new Router({
       path:'/posts',
       components:{
         main:PostList
+      }
+    },
+    {
+      name:'new_post',
+      path:'/new_post',
+      components:{
+        main:Post,
       }
     },
     {
