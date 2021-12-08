@@ -4,10 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Axios from 'axios'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import Notifications from 'vue-notification'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/main.css'
 
 Vue.prototype.$http = Axios
+Vue.use(mavonEditor)
+Vue.use(Notifications)
 
 Vue.config.productionTip = false
 

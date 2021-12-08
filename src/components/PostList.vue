@@ -4,8 +4,9 @@
     <div class="loading" v-if="isLoading">
       <img  src="../assets/loading2.gif" alt="">
     </div>
+    <router-link :to="'new_post'" tag="button">Create a new post!</router-link>
     <!-- 代表我们的主题帖子列表 -->
-    <div class="posts" v-else >
+    <div class="posts">
       <ul>
         <li>
         <div class="toobar">
