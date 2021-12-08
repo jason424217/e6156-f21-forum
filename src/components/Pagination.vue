@@ -1,16 +1,25 @@
 <template>
-    <div class="pagination">
-        <button @click="changeBtn">首页</button>
-        <button @click="changeBtn">上一页</button>
-        <button v-if="judge" class="pagebtns">......</button>
-        <button v-for="btn in pagebtns" :key="btn.num"
-        @click="changeBtn(btn)"
-        :class="[{currentPage:btn==currentPage},'pagebtns']">
-            {{btn}}
-        </button>
-        <button @click="changeBtn">下一页</button>
-    </div>
-
+<!--    <div class="pagination">-->
+<!--        <button @click="changeBtn">first</button>-->
+<!--        <button @click="changeBtn">prev</button>-->
+<!--        <button v-if="judge" class="pagebtns">......</button>-->
+<!--        <button v-for="btn in pagebtns" :key="btn.num"-->
+<!--        @click="changeBtn(btn)"-->
+<!--        :class="[{currentPage:btn===currentPage},'pagebtns']">-->
+<!--            {{btn}}-->
+<!--        </button>-->
+<!--        <button @click="changeBtn">next</button>-->
+<!--        <button @click="changeBtn">last</button>-->
+<!--    </div>-->
+  <div class="pagination">
+    <button @click="prevOrNext(-1)">prev</button>
+    <button v-for="(page, idx) in pagebtns"
+        :key="idx"
+        :class="{activated: page === currentPage}"
+        @click="changeBtn(page)"
+    >{{page}}</button>
+    <button @click="prevOrNext(1)">next</button>
+  </div>
 </template>
 
 <script>
@@ -19,46 +28,60 @@ export default {
   name: "Pagination",
   data() {
     return {
-       pagebtns:[1,2,3,4,5,'......'],
        currentPage:1,
-       judge:false
     };
+  },
+  props:{
+    totalItems: Number,
+    itemsPerPage: Number
+  },
+  computed:{
+    totalPages:function(){
+      let mod = this.totalItems % this.itemsPerPage
+      let res = (this.totalItems / this.itemsPerPage) | 0
+      if (mod === 0) {
+        return res
+      } else {
+        return res + 1
+      }
+    },
+    pagebtns:function(){
+      const c = this.currentPage
+      const t = this.totalPages
+      if (t <= 5) {
+        let res = new Array(t)
+        for (let i = 1; i <= t; i++) {
+          res[i - 1] = i
+        }
+        return res
+      } else if (c <= 3) {
+        return [1,2,3,4,5,'...',t]
+      } else if (c >= t - 2) {
+        return [1,'...',t-4,t-3,t-2,t-1,t]
+      } else {
+        return [1,'...',c-2,c-1,c,c+1,c+2,'...',t]
+      }
+    }
   },
   methods:{
       changeBtn:function(page){
-          if(typeof page != 'number'){
-              switch(page.target.innerText){
-                  case '上一页':
-                  $('button.currentPage').prev().click()//jquery API
-                  break;
-                  case '下一页':
-                  $('button.currentPage').next().click()
-                  break;
-                  case '首页':
-                  this.pagebtns=[1,2,3,4,5,'......']
-                  this.changeBtn(1)
-                  break;
-                  default:
-                  break;
-              }
-              return
-          }
-
-          this.currentPage = page
-          if(page > 4){
-              this.judge = true
-          }else{
-              this.judge = false
-              
-          }
-          if(page == this.pagebtns[4]){
-              this.pagebtns.shift()
-              this.pagebtns.splice(4,0,this.pagebtns[3]+1)
-          } else if(page == this.pagebtns[0]&& page !=1){
-              this.pagebtns.unshift(this.pagebtns[0]-1)
-              this.pagebtns.splice(5,1)
-          }
-          this.$emit('handle',this.currentPage)
+        console.log(page)
+        if (page === this.currentPage) return
+        if (typeof page === 'string') return
+        this.currentPage = page
+        this.$emit('handle', this.currentPage)
+      },
+      prevOrNext(n) {
+        this.currentPage += n
+        if (this.currentPage < 1) {
+          this.currentPage = 1
+          return
+        } else if (this.currentPage > this.totalPages) {
+          this.currentPage = this.totalPages
+          return
+        }
+        console.log(this.currentPage)
+        this.$emit('handle', this.currentPage)
       }
   }
 };
@@ -73,6 +96,12 @@ export default {
     border-radius: 5px;
     /*box-shadow: 0px 2px 9px #888888;*/
     border: 1px solid #888888;
+  }
+
+  .activated {
+    border-color: #2d8cf0;
+    background-color: #2d8cf0;
+    color: #fff;
   }
 
   button {
