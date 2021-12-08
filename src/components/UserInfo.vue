@@ -1,7 +1,7 @@
 <template>
   <div class="UserInfo">
       <div class="loading" v-if="isLoading">
-    <img src="../assets/loading.gif" >
+    <img src="../assets/loading2.gif" >
   </div>
 <div class="userInfomation" v-else>
   <router-link :to="{
