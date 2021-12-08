@@ -9,11 +9,11 @@
       <ul>
         <li>
         <div class="toobar">
-          <span>Newest post </span>
-          <span>Newest reply</span>
+          <span @click="sortList()">Newest post</span>
+          <span @click="sortList('last_comment_time')">Newest reply</span>
         </div>
       </li>
-      <li v-for="post in posts" :key='post.num'> 
+      <li v-for="post in posts" :key='post.num'>
         <!-- 头像 -->
         <p>{{post.nickname}}</p>
         <!-- 标题 -->
@@ -27,13 +27,13 @@
           {{post.title}}
         </span>
         </router-link>
-        
+
         <!-- 最终回复时间 -->
-        <span class="last_reply">{{post.update_time | formatDate}}</span>
+        <span class="last_reply">{{post.last_comment_time | formatDate}}</span>
       </li>
     <li>
 
-      <pagination @handle="changePage"></pagination>
+      <pagination :total-items="totalItems" :items-per-page="itemsPerPage" @handle="changePage"></pagination>
     </li>
 
     </ul>
@@ -41,7 +41,7 @@
   </div>
 </template>
 
-<script> 
+<script>
 import pagination from './Pagination.vue'
 export default {
   name: 'PostList',
@@ -49,7 +49,30 @@ export default {
     return {
       isLoading:false,
       posts:[],
-      pageData:1
+      offset:0,
+      sort_by:undefined,
+      totalItems:0,
+      itemsPerPage:1,
+      helper:true
+    }
+  }
+  ,watch:{
+    helper:{
+      handler:function(){
+        this.$http.get("https://d2tvlmotz0dchv.cloudfront.net/api/posts", {
+          headers:{
+            id_token: this.$root.id_token
+          }
+        })
+          .then((res)=>{
+            this.totalItems = res.data.data.length
+            console.log(this.totalItems)
+          })
+          .catch((err)=>{
+            console.log(err)
+          })
+      },
+      immediate:true
     }
   },
   components:{
@@ -57,22 +80,25 @@ export default {
   },
   methods:{
     getPost:function(){
+      let params = {
+        offset: this.offset,
+        limit: this.itemsPerPage
+      }
+      if (this.sort_by !== undefined) {
+        params['orderby'] = this.sort_by
+      }
       this.$http.get('https://d2tvlmotz0dchv.cloudfront.net/api/postinfo',{
       //this.$http.get('https://wt3zom2jk0.execute-api.us-east-2.amazonaws.com/dev/api/users/whoami',{
         params:{
+          params
         },
         headers:{
           id_token: this.$root.id_token
         }
-        
       })
       .then((res)=>{
         this.isLoading = false
-        this.posts = res.data.data.sort(function(a, b){
-          var a_date = new Date(a.update_time)
-          var b_date = new Date(b.update_time)
-
-          return b_date.getTime() - a_date.getTime()});
+        this.posts = res.data.data
         console.log(res)
       })
       .catch((err)=>{
@@ -80,11 +106,16 @@ export default {
       })
     },
     changePage:function(value){
-      this.pageData = value
+      this.offset = (value - 1) * this.itemsPerPage
+      // this.isLoading = true
+      this.getPost()
+    },
+    sortList:function(val){
+      this.sort_by = val
       this.getPost()
     }
   },
-  created:function(){  
+  created:function(){
     if(!this.$root.logged_in) {
       this.$router.push('/')
     }
