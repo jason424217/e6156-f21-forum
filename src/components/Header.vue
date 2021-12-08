@@ -7,10 +7,17 @@
     <ul>
      <router-link :to="{
       name:'root',
-      }"> <li v-if="this.$root.logged_in"><a href="http://localhost:8080/#/">Home page</a></li>
+      }"> <li v-if="this.$root.logged_in"><router-link to="/posts">Home page</router-link></li>
       </router-link>
 
-      <li v-if="this.$root.logged_in"><a href="#">User Profile</a></li>
+      <li v-if="this.$root.logged_in">
+        <router-link :to="{
+          name: 'user_info',
+          params: {
+            name: 'self'
+          }
+        }">User Profile</router-link>
+      </li>
 
     </ul>
   </div>
