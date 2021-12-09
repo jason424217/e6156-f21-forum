@@ -4,14 +4,14 @@
     <div class="loading" v-if="isLoading">
       <img  src="../assets/loading2.gif" alt="">
     </div>
-    <router-link :to="'new_post'" tag="button">Create a new post!</router-link>
     <!-- 代表我们的主题帖子列表 -->
-    <div class="posts">
+    <div class="posts" v-else>
+      <router-link :to="'new_post'" tag="button" class="btn btn-primary">Create a new post!</router-link>
       <ul>
         <li>
         <div class="toobar">
-          <span @click="sortList()">Newest post</span>
-          <span @click="sortList('last_comment_time')">Newest reply</span>
+          <span @click="sortList()">Newest reply</span>
+          <span @click="sortList('update_time')">Newest post</span>
         </div>
       </li>
       <li v-for="post in posts" :key='post.num'>
@@ -32,13 +32,9 @@
         <!-- 最终回复时间 -->
         <span class="last_reply">{{post.last_comment_time | formatDate}}</span>
       </li>
-    <li>
-
-      <pagination :total-items="totalItems" :items-per-page="itemsPerPage" @handle="changePage"></pagination>
-    </li>
-
     </ul>
     </div>
+    <pagination :total-items="totalItems" :items-per-page="itemsPerPage" @handle="changePage" v-show="!isLoading"></pagination>
   </div>
 </template>
 
@@ -53,7 +49,7 @@ export default {
       offset:0,
       sort_by:undefined,
       totalItems:0,
-      itemsPerPage:1,
+      itemsPerPage:2,
       helper:true
     }
   }
@@ -90,9 +86,7 @@ export default {
       }
       this.$http.get('https://d2tvlmotz0dchv.cloudfront.net/api/postinfo',{
       //this.$http.get('https://wt3zom2jk0.execute-api.us-east-2.amazonaws.com/dev/api/users/whoami',{
-        params:{
-          params
-        },
+        params,
         headers:{
           id_token: this.$root.id_token
         }
@@ -108,11 +102,12 @@ export default {
     },
     changePage:function(value){
       this.offset = (value - 1) * this.itemsPerPage
-      // this.isLoading = true
+      this.isLoading = true
       this.getPost()
     },
     sortList:function(val){
       this.sort_by = val
+      this.isLoading = true
       this.getPost()
     }
   },
@@ -250,6 +245,6 @@ export default {
   .loading {
     text-align: center;
     padding: 200px;
-    opacity: 0.7; 
+    opacity: 0.7;
   }
 </style>

@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="main-body">
+    <div class="loading" v-if="isLoading">
+      <img  src="../assets/loading2.gif" alt="">
+    </div>
+    <div class="main-body" v-else>
       <div class="row gutters-sm">
         <div class="col-md-4 mb-3">
           <div class="card">
@@ -21,30 +24,30 @@
             <ul class="list-group list-group-flush">
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="mb-0">State</h6>
-                <span class="text-secondary">{{user_info.addr_info.state}}</span>
+                <span class="text-secondary">{{user_info.addr_info.state | formatUndefined}}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="mb-0">City</h6>
-                <span class="text-secondary">{{user_info.addr_info.city}}</span>
+                <span class="text-secondary">{{user_info.addr_info.city | formatUndefined}}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="mb-0">Street 1</h6>
-                <span class="text-secondary">{{user_info.addr_info.street_line_1}}</span>
+                <span class="text-secondary">{{user_info.addr_info.street_line_1 | formatUndefined}}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="mb-0">Street 2</h6>
-                <span class="text-secondary">{{user_info.addr_info.street_line_2}}</span>
+                <span class="text-secondary">{{user_info.addr_info.street_line_2 | formatUndefined}}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <h6 class="mb-0">Zip Code</h6>
-                <span class="text-secondary">{{user_info.addr_info.zip_code}}</span>
+                <span class="text-secondary">{{user_info.addr_info.zip_code | formatUndefined}}</span>
               </li>
             </ul>
           </div>
         </div>
         <div class="col-md-8">
           <div class="card mb-3">
-            <div v-if="user_info.bookmarks.length > 0" class="card-body">
+            <div v-if="user_info.bookmark_info.length > 0" class="card-body">
               <div class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Author</h6>
@@ -54,24 +57,24 @@
                 </div>
               </div>
               <hr>
-              <div v-for="(bookmark, idx) in user_info.bookmarks"
+              <div v-for="(bookmark, idx) in user_info.bookmark_info"
                    :key="idx"
                    class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0"><router-link :to="{
-                    name: 'user_info',
-                    params: {
-                      name: bookmark.user_id
-                    }
-                  }">{{bookmark.nickname}}</router-link>
+                  name: 'user_info',
+                  params: {
+                    name: bookmark.user_id
+                  }
+                }">{{bookmark.nickname}}</router-link>
                   </h6>
                 </div>
                 <div class="col-sm-9 text-secondary"><router-link :to="{
-                  name: 'post_content',
-                  params: {
-                    post_id: bookmark.post_id
-                  }
-                }">{{bookmark.title}}</router-link>
+                name: 'post_content',
+                params: {
+                  post_id: bookmark.post_id
+                }
+              }">{{bookmark.title}}</router-link>
                 </div>
                 <hr>
               </div>
@@ -86,60 +89,33 @@
   </div>
 </template>
 
+
 <script>
 export default {
   name: 'UserInfo',
   data() {
     return {
-      helper: true,
+      isLoading: false,
       name: this.$route.params.name,
       user_info: {}
     }
   },
   methods: {
-    testUserInfo: function() {
-      this.user_info = {}
-      let u = this.user_info
-      u['nickname'] = 'name1'
-      u['first_name'] = 'Yihan'
-      u['last_name'] = 'Yin'
-      u['addr_info'] = {}
-      u['addr_info']['state'] = 'NO INFO'
-      u['addr_info']['city'] = 'NO INFO'
-      u['addr_info']['street_line_1'] = 'NO INFO'
-      u['addr_info']['street_line_2'] = 'NO INFO'
-      u['addr_info']['zip_code'] = 'NO INFO'
-      let bookmark1={}, bookmark2={}, bookmark3={}
-      u['bookmarks'] = [bookmark1, bookmark2, bookmark3]
-      bookmark1['user_id']='1f6e0895-3899-42d7-a738-6a9fd72cc6a0'
-      bookmark1['title']='t1'
-      bookmark1['post_id']='7aa0838e-6cad-4a61-b409-77b288c83920'
-      bookmark1['nickname']='name1'
-      bookmark2['user_id']='1f6e0895-3899-42d7-a738-6a9fd72cc6a0'
-      bookmark2['title']='t1'
-      bookmark2['post_id']='8369da2c-2866-497d-af5e-8e298bcbc16d'
-      bookmark2['nickname']='name1'
-      bookmark3['user_id']='1f6e0895-3899-42d7-a738-6a9fd72cc6a0'
-      bookmark3['title']='t1'
-      bookmark3['post_id']='c0428794-21a9-4003-9112-0d4a81560b45'
-      bookmark3['nickname']='name1'
-    },
     getUserInfo: function() {
       let params = {}
       if (this.name !== 'self') {
         params['user_id'] = this.name
       }
       this.$http.get("https://d2tvlmotz0dchv.cloudfront.net/api/userprofile", {
-        params:{
-          params
-        },
+        params,
         headers:{
           id_token: this.$root.id_token
         }
       })
         .then((res)=>{
+          console.log(res)
           this.user_info = res.data.data
-          console.log(this.user_info)
+          this.isLoading = false
         })
         .catch((err)=>{
           console.log(err)
@@ -147,8 +123,8 @@ export default {
     }
   },
   beforeMount() {
-    // this.getUserInfo()
-    this.testUserInfo()
+    this.isLoading = true
+    this.getUserInfo()
   }
 }
 </script>
@@ -206,5 +182,10 @@ body{
 }
 .shadow-none {
   box-shadow: none!important;
+}
+.loading {
+  text-align: center;
+  padding: 200px;
+  opacity: 0.7;
 }
 </style>
