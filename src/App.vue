@@ -2,9 +2,8 @@
   <div id="app">
     <Header></Header>
     <div class="main">
-    <router-view name="main"></router-view>
-    <router-view name="slidebar"></router-view> 
-
+      <router-view name="main" :key="$route.path"></router-view>
+      <router-view name="slidebar"></router-view>
     </div>
   </div>
 </template>
@@ -33,7 +32,7 @@ export default {
   margin:0;
   padding:0;
 }
- 
+
 .main{
   width:85%;
   margin: 0 auto;
@@ -41,6 +40,6 @@ export default {
   flex-direction: row;
 }
  #app{
-  background-color: #e1e1e1; 
+  background-color: #e1e1e1;
 }
 </style>

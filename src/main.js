@@ -15,6 +15,13 @@ Vue.use(Notifications)
 
 Vue.config.productionTip = false
 
+Vue.filter('formatUndefined', function(obj) {
+  if (obj === undefined || obj === null) {
+    return 'NO INFO'
+  }
+  return obj
+})
+
 //处理时间
 Vue.filter('formatDate', function (str) {
   if (!str) return ''
