@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="loading" v-if="isLoading">
-      <img  src="../assets/loading.gif" alt="">
+      <img  src="../assets/loading2.gif" alt="">
     </div>
     <div class="main-body" v-else>
       <div class="row gutters-sm">
@@ -62,19 +62,19 @@
                    class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0"><router-link :to="{
-                    name: 'user_info',
-                    params: {
-                      name: bookmark.user_id
-                    }
-                  }">{{bookmark.nickname}}</router-link>
+                  name: 'user_info',
+                  params: {
+                    name: bookmark.user_id
+                  }
+                }">{{bookmark.nickname}}</router-link>
                   </h6>
                 </div>
                 <div class="col-sm-9 text-secondary"><router-link :to="{
-                  name: 'post_content',
-                  params: {
-                    post_id: bookmark.post_id
-                  }
-                }">{{bookmark.title}}</router-link>
+                name: 'post_content',
+                params: {
+                  post_id: bookmark.post_id
+                }
+              }">{{bookmark.title}}</router-link>
                 </div>
                 <hr>
               </div>
@@ -182,5 +182,10 @@ body{
 }
 .shadow-none {
   box-shadow: none!important;
+}
+.loading {
+  text-align: center;
+  padding: 200px;
+  opacity: 0.7;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="article">
     <!-- 数据未返回时，显示这个正在加载的gif -->
     <div class="loading" v-if="isLoading">
-      <img src="../assets/loading.gif" alt>
+      <img src="../assets/loading2.gif" alt>
     </div>
     <div v-else>
       <div class="topic_header">
@@ -79,17 +79,12 @@ export default {
   beforeMount: function() {
     this.isLoading = true; //加载成功之前显示加载动画
     this.getPostData();
-  },
-     watch:{ //检查路由发生变化
-    '$route'(to,from){
-      this.getArticleData()
-
-    }
-  },
+  }
 };
 </script>
 
-<style>
+
+<style scoped>
 @import url("../assets/markdown-github.css"); /* 引入外部css需去掉scoped */
 .article {
   background-color: #e1e1e1;

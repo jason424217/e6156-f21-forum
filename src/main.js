@@ -8,6 +8,7 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import Notifications from 'vue-notification'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/main.css'
 
 Vue.prototype.$http = Axios
 Vue.use(mavonEditor)
