@@ -6,7 +6,7 @@
     </div>
     <!-- 代表我们的主题帖子列表 -->
     <div class="posts" v-else>
-      <router-link :to="'new_post'" tag="button">Create a new post!</router-link>
+      <router-link :to="'new_post'" tag="button" class="btn btn-primary">Create a new post!</router-link>
       <ul>
         <li>
         <div class="toobar">
@@ -34,7 +34,7 @@
       </li>
     </ul>
     </div>
-    <pagination :total-items="totalItems" :items-per-page="itemsPerPage" @handle="changePage"></pagination>
+    <pagination :total-items="totalItems" :items-per-page="itemsPerPage" @handle="changePage" v-show="!isLoading"></pagination>
   </div>
 </template>
 
@@ -107,6 +107,7 @@ export default {
     },
     sortList:function(val){
       this.sort_by = val
+      this.isLoading = true
       this.getPost()
     }
   },
