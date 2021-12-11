@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .g-signin-button {
   box-sizing: border-box;
   position: relative;

@@ -49,7 +49,7 @@ export default {
       offset:0,
       sort_by:undefined,
       totalItems:0,
-      itemsPerPage:2,
+      itemsPerPage:10,
       helper:true
     }
   }

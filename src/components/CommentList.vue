@@ -130,6 +130,7 @@ export default {
             text: 'reply successfully created!',
             type: 'success'
           })
+
           this.$emit('refresh')
           this.cancel(idx)
         }

@@ -39,8 +39,6 @@ export default new Router({
       path:'/posts/:post_id',
       components:{
         main:Article,
-        slidebar:SlideBar
-
       }
     },
     {

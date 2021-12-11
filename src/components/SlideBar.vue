@@ -89,14 +89,11 @@ export default {
   .autherSummary, .recent_replies, .recent_topics {
     background-color: #fff;
   }
-  .autherSummary{
-    position: relative;
-  }
   .autherinfo {
-    width: 299px;
-    float: right;
-    margin-top: 5px;
-    margin-left: 10px;
+    width: 220px;
+    position: relative;
+    top: -700px;
+    right: -850px;
   }
   .authorName{
     display: inline-block;
@@ -125,7 +122,7 @@ export default {
   .topbar {
     padding: 10px;
     background-color: #f6f6f6;
-    height: 16px;
+    height: 40px;
     font-size: 12px;
     margin-top: 10px;
   }

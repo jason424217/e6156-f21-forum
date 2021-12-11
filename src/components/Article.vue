@@ -10,6 +10,8 @@
         <ul>
           <li>•    posted at    {{post.update_time}}</li>
           <li>•    author : {{post.nickname}}</li>
+          <button v-if="this.bookmarked" v-on:click="removeBookmark">Remove from bookmarks</button>
+          <button v-else v-on:click="addBookmark">Add to bookmarks</button>
         </ul>
         <div class="markdown-text" v-html="post.html"></div>
       </div>
@@ -30,6 +32,7 @@ export default {
   components: {CommentList},
   data() {
     return {
+      bookmarked: false,
       isLoading: false,
       post: {} //代表当前文章页的所有属性
     };
@@ -70,15 +73,73 @@ export default {
           this.isLoading = false;
           let update = res.data.data[0];
           this.post.comments = update['comments']
+          //this.$set(this.post,'comments',update['comments'])
         })
         .catch(err => {
           console.log(err);
         });
-    }
+    },
+    getBookmarkInfo: function() {
+      this.$http
+        .get("https://d2tvlmotz0dchv.cloudfront.net/api/bookmarks", {
+          params:{
+            post_id: this.$route.params.post_id
+          },
+          headers:{
+            id_token: this.$root.id_token
+          },
+        })
+        .then(res => {
+          console.log(res)
+          if (res.data.length == 0) {
+            this.bookmarked = false
+          }
+          else {
+            this.bookmarked = true
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    addBookmark: function() {
+      this.$http
+        .post("https://d2tvlmotz0dchv.cloudfront.net/api/bookmarks",
+          { post_id: this.$route.params.post_id}, 
+          {
+            headers:{
+              id_token: this.$root.id_token
+            },
+        })
+        .then(res => {
+          this.bookmarked = true
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    removeBookmark: function() {
+      this.$http
+        .delete("https://d2tvlmotz0dchv.cloudfront.net/api/bookmarks", {
+          params:{
+            post_id: this.$route.params.post_id
+          },
+          headers:{
+            id_token: this.$root.id_token
+          },
+        })
+        .then(res => {
+          this.bookmarked = false
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
   },
   beforeMount: function() {
     this.isLoading = true; //加载成功之前显示加载动画
     this.getPostData();
+    this.getBookmarkInfo();
   }
 };
 </script>

@@ -42,7 +42,7 @@ Vue.filter('formatDate', function (str) {
       return number + ' second ago'
     }
   } else if ((time / 60000) < 60) {
-    number = parseInt((time / 1000))
+    number = parseInt((time / 60000))
     if (number > 1) {
       return number + ' minutes ago'
     }
