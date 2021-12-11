@@ -73,6 +73,7 @@ export default {
           this.isLoading = false;
           let update = res.data.data[0];
           this.post.comments = update['comments']
+          this.$forceUpdate()
           //this.$set(this.post,'comments',update['comments'])
         })
         .catch(err => {
